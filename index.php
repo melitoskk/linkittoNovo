@@ -240,11 +240,7 @@
             color: #0056b3;
         }
 
-        .missing {
-            color: gray;
-            font-style: italic;
-        }
-
+        
         @media (min-width: 768px) {
             .header {
                 width: 85%;
@@ -344,6 +340,11 @@
         .hidden {
             display: none;
         }
+        .missing {
+            color: gray;
+            font-style: italic;
+        }
+
     </style>
     <link rel="icon" href="./img/icon.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
