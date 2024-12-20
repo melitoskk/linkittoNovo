@@ -240,7 +240,7 @@
             color: #0056b3;
         }
 
-        
+
         @media (min-width: 768px) {
             .header {
                 width: 85%;
@@ -340,11 +340,11 @@
         .hidden {
             display: none;
         }
+
         .missing {
             color: gray;
             font-style: italic;
         }
-
     </style>
     <link rel="icon" href="./img/icon.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
@@ -361,7 +361,7 @@
             <label for="textbox">Insira aqui o número do produto que deseja:</label>
         </div>
         <div class="textbox-container">
-            <input type="text" id="textbox" class="textbox" placeholder="Insira o número aqui" oninput="toggleIcon()">
+            <input type="number" id="textbox" class="textbox" placeholder="Insira o número aqui" oninput="toggleIcon()">
             <i id="searchIcon" class="fas fa-search icon visible" style="pointer-events: none;"></i>
             <i id="clearIcon" class="fas fa-times icon hidden" onclick="clearTextbox()"></i>
         </div>
@@ -484,14 +484,13 @@
                         resetUI();
                         return;
                     }
-                    loading.classList.add('hidden');
                     if (data.nome_produto) {
                         updateUIWithProduct(data);
                         if (window.location.pathname !== `/${id}`) {
                             history.pushState({ id }, '', `/${id}`);
                         }
                     } else {
-
+                        loading.classList.add('hidden');
                         errorStatus.classList.remove('hidden');
                     }
                 })
@@ -502,36 +501,45 @@
         }
 
         function updateUIWithProduct(data) {
-            successStatus.classList.remove('hidden');
-            productCard.classList.remove('hidden');
-            if (data.imagem_produto) {
-                productImage.src = data.imagem_produto;
-                // Adiciona evento de erro
-                productImage.addEventListener('error', function () {
-                    productImage.src = imgReserva; // Caso a imagem não seja carregada corretamente
+            async function changeData() {
+                const imageLoaded = new Promise((resolve) => {
+                    productImage.onload = resolve; // Resolve quando a imagem carrega
+                    productImage.onerror = () => {
+                        productImage.src = imgReserva; // Define imagem reserva em caso de erro
+                        resolve(); // Ainda assim resolve para continuar o fluxo
+                    };
                 });
-            } else {
-                productImage.src = imgReserva;
+
+                // Configura a imagem do produto
+                productImage.src = data.imagem_produto || imgReserva;
+                await imageLoaded; // Aguarda o carregamento da imagem
+
+                // Atualizar texto do produto
+                productTitle.textContent = data.nome_produto;
+                productNumber.textContent = `N°${data.id_produto}`;
+
+                // Atualizar descrição do produto
+                if (data.descricao) {
+                    productDesc.textContent = data.descricao;
+                    productDesc.classList.remove("missing");
+                } else {
+                    productDesc.textContent = "Sem descrição ainda";
+                    productDesc.classList.add("missing");
+                }
+
+                // Atualizar links
+                shopLink.innerText = data.loja_nome;
+                shopLink.href = data.loja_link;
+                productButton.href = `/redirect.php?produto=${data.id_produto}`;
             }
 
-
-
-            productTitle.textContent = data.nome_produto;
-            productNumber.textContent = `N°${data.id_produto}`;
-            if (data.descricao) {
-                productDesc.textContent = data.descricao;
-                productDesc.classList.remove("missing")
-            } else {
-                productDesc.textContent = "Sem descrição ainda"
-                productDesc.classList.add("missing")
-            }
-
-            shopLink.innerText = data.loja_nome;
-            shopLink.href = data.loja_link;
-            productButton.href = `/redirect.php?produto=${data.id_produto}`;
-
-            // Ajuste o cabeçalho ao exibir o produto
-            searchUI();
+            changeData().then(() => {
+                // Exibir card e atualizar UI após carregar a imagem e os dados
+                searchUI();
+                loading.classList.add('hidden');
+                successStatus.classList.remove('hidden');
+                productCard.classList.remove('hidden');
+            });
         }
 
 
