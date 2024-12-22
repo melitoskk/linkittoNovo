@@ -189,7 +189,7 @@
             top: 25px;
             left: 25px;
             border-radius: 50%;
-            
+
         }
 
 
@@ -506,6 +506,7 @@
                     }
                     if (data.nome_produto) {
                         updateUIWithProduct(data);
+                        incrementSearchCount(data.id_produto);
                         if (window.location.pathname !== `/${id}`) {
                             history.pushState({ id }, '', `/${id}`);
                         }
@@ -548,7 +549,7 @@
                 }
 
                 // Atualizar links
-                shopLogo.src =data.loja_imagem
+                shopLogo.src = data.loja_imagem
                 shopLink.innerText = data.loja_nome;
                 shopLink.href = data.loja_link;
                 productButton.href = `/redirect.php?produto=${data.id_produto}`;
@@ -614,6 +615,16 @@
             textbox.focus();
         }
 
+        function incrementSearchCount(productId) {
+            fetch(`increment_searchs.php?id=${productId}`) // Script PHP para incrementar 'searchs'
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Contagem de buscas atualizada.');
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar contagem de buscas:', error);
+                });
+        }
     </script>
 
 

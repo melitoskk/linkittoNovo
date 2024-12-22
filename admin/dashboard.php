@@ -89,6 +89,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $exibir_url = "Por favor, selecione uma imagem para fazer o upload.";
     }
 
+
+    function salvarLegendas($conn, $nome_produto, $descricao_produto, $id_produto)
+    {
+        $textoInsta = "[sparkles] $nome_produto\nGostou? Insira o número do produto no link da bio para encontrar o produto!\n[link]N°: $id_produto\n[notes] $descricao_produto";
+        $textoTiktok = "[sparkles] $nome_produto\n[link] Adquira agora: https://linkitto.com.br/$id_produto\n[notes] $descricao_produto";
+        $textoYoutube = "[sparkles] $nome_produto\n[link]Compre diretamente aqui: https://linkitto.com.br/$id_produto\n[notes] $descricao_produto";
+
+        $sql = "INSERT INTO legendas (textoInsta, textoTiktok, textoYoutube, produto_id) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssi", $textoInsta, $textoTiktok, $textoYoutube, $id_produto);
+
+        if ($stmt->execute()) {
+            echo "Legendas salvas com sucesso!";
+        } else {
+            echo "Erro ao salvar legendas: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
+
+
+
     // Criar Produto
     if (isset($_POST['criar_produto']) && !empty($_POST['categoria_produto_id']) && !empty($_POST['id_produto']) && !empty($_POST['loja_produto_id'])) {
         $categoria_id_produto = $_POST['categoria_produto_id'];
@@ -103,12 +125,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Produto já existe!";
         } else {
             if (criarProduto($conn, $categoria_id_produto, $nome_produto, $id_produto, $link_produto, $imagem_produto, $descricao_produto, $loja_produto_id)) {
+                salvarLegendas($conn, $nome_produto, $descricao_produto, $id_produto);
                 echo "Produto $id_produto criado com sucesso!";
+                echo "<p><a href='https://linkitto.com.br/admin/legendas.php?id=$id_produto'>Legendas</a></p>";
+
+                
             } else {
                 echo "Erro ao criar produto: " . $conn->error;
             }
         }
     }
+
 
 }
 ?>
@@ -232,7 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     </style>
-     <script>
+    <script>
         function gerarIdUnico() {
             const xhr = new XMLHttpRequest();
             xhr.open("GET", "gerar_id.php", true);
