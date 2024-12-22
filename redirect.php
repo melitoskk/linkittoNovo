@@ -59,8 +59,9 @@
             border-radius: 10px;
             width: 0;
             height: 100%;
-            background-color:rgb(216, 216, 216);
-            transition: width 2s ease-in-out; /* Ajuste da duração da transição */
+            background-color: rgb(216, 216, 216);
+            transition: width 2s ease-in-out;
+            /* Ajuste da duração da transição */
         }
 
         .main {
@@ -142,12 +143,20 @@
 
         echo "<script>updateProgress(0);</script>";
 
-        $sql = "SELECT link_produto FROM produtos WHERE id_produto = $id_produto";
+        $sql = "SELECT link_produto, clicks FROM produtos WHERE id_produto = $id_produto";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $link_produto = $row['link_produto'];
+            $clicks = $row['clicks'];
+
+            // Incrementar o valor de clicks
+            $clicks++;
+
+            // Atualizar o número de clicks no banco de dados
+            $updateSql = "UPDATE produtos SET clicks = $clicks WHERE id_produto = $id_produto";
+            $conn->query($updateSql);
 
             echo "<script>updateProgress(100);</script>";
 
