@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Produto já existe!";
         } else {
             if (criarProduto($conn, $categoria_id_produto, $nome_produto, $id_produto, $link_produto, $imagem_produto, $descricao_produto, $loja_produto_id)) {
-                echo "Produto criado com sucesso!";
+                echo "Produto $id_produto criado com sucesso!";
             } else {
                 echo "Erro ao criar produto: " . $conn->error;
             }
