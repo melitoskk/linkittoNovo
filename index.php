@@ -165,6 +165,7 @@
         }
 
         .product-card {
+            position: relative;
             background-color: white;
             color: black;
             border-radius: 8px;
@@ -175,12 +176,28 @@
             box-sizing: border-box;
         }
 
-        .product-card img {
+        .product-image {
             width: 100%;
             aspect-ratio: 1;
             object-fit: cover;
             border-radius: 8px;
             box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-overlay {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            border-radius: 50%;
+            
+        }
+
+
+        .logo-overlay img {
+            box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
         }
 
         .product-details {
@@ -240,7 +257,6 @@
             color: #0056b3;
         }
 
-
         @media (min-width: 768px) {
             .header {
                 width: 85%;
@@ -272,7 +288,7 @@
                 box-sizing: content-box
             }
 
-            .product-card img {
+            .product-image {
                 width: 50%;
                 object-fit: cover;
                 border-radius: 8px;
@@ -385,6 +401,9 @@
 
             <div id="product-card" class="product-card hidden">
                 <img id="product-image" class="product-image" src="./img/cinza.png" alt="Imagem Produto">
+                <div class='logo-overlay'>
+                    <img id='shop-logo' src="./img/cinza.png" alt="Imagem Produto">
+                </div>
                 <div id="product-details" class="product-details">
                     <div style="display: flex; flex-direction: column;">
                         <strong id="product-title" class="product-title"></strong>
@@ -420,6 +439,7 @@
         const productDesc = document.getElementById('product-desc');
         const productButton = document.getElementById('product-button');
         const shopLink = document.getElementById('shop-link');
+        const shopLogo = document.getElementById('shop-logo');
 
         const imgReserva = './img/cinza.png'
 
@@ -528,6 +548,7 @@
                 }
 
                 // Atualizar links
+                shopLogo.src =data.loja_imagem
                 shopLink.innerText = data.loja_nome;
                 shopLink.href = data.loja_link;
                 productButton.href = `/redirect.php?produto=${data.id_produto}`;

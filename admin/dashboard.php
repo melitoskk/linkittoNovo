@@ -232,6 +232,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     </style>
+     <script>
+        function gerarIdUnico() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "gerar_id.php", true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    document.getElementById("id_produto").value = xhr.responseText;
+                } else {
+                    alert("Erro ao gerar ID. Tente novamente.");
+                }
+            };
+            xhr.send();
+        }
+    </script>
 </head>
 
 <body>
@@ -277,7 +291,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="text" id="nome_produto" name="nome_produto" required><br><br>
 
         <label for="id_produto">ID do Produto:</label>
-        <input type="text" id="id_produto" name="id_produto" required><br><br>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="id_produto" name="id_produto" required readonly>
+            <button type="button" onclick="gerarIdUnico()">Gerar</button>
+        </div><br><br>
 
         <label for="imagem_produto">Imagem do Produto:</label>
         <input type="url" id="imagem_produto" name="imagem_produto" required><br><br>
