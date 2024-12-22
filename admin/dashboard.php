@@ -104,6 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             if (criarProduto($conn, $categoria_id_produto, $nome_produto, $id_produto, $link_produto, $imagem_produto, $descricao_produto, $loja_produto_id)) {
                 echo "Produto $id_produto criado com sucesso!";
+                echo "<p><a href='https://linkitto.com.br/admin/legendas.php?id=$id_produto'>Legendas</a></p>";
             } else {
                 echo "Erro ao criar produto: " . $conn->error;
             }
