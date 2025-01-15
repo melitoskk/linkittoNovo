@@ -85,16 +85,19 @@ $conn->close();
 <?php if ($id_produto > 0): ?>
     <h1>Legendas para o Produto ID: <?php echo htmlspecialchars($id_produto); ?></h1>
     
+    <p>Insta</p>
     <div class="textbox-container">
         <textarea id="textoInsta" rows="4" cols="50" readonly><?php echo htmlspecialchars($textoInsta); ?></textarea>
         <button class="copy-button" onclick="copyToClipboard('textoInsta')">Copiar</button>
     </div>
     
+    <p>TikTok</p>
     <div class="textbox-container">
         <textarea id="textoTiktok" rows="4" cols="50" readonly><?php echo htmlspecialchars($textoTiktok); ?></textarea>
         <button class="copy-button" onclick="copyToClipboard('textoTiktok')">Copiar</button>
     </div>
     
+    <p>YouTube</p>
     <div class="textbox-container">
         <textarea id="textoYoutube" rows="4" cols="50" readonly><?php echo htmlspecialchars($textoYoutube); ?></textarea>
         <button class="copy-button" onclick="copyToClipboard('textoYoutube')">Copiar</button>
